@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.xtext.example.mydocker
+Bundle-ManifestVersion: 2
+Bundle-Name: org.xtext.example.mydocker
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.xtext.example.mydocker; singleton:=true
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.16.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: org.xtext.example.mydocker,
+ org.xtext.example.mydocker.generator,
+ org.xtext.example.mydocker.myDocker,
+ org.xtext.example.mydocker.myDocker.impl,
+ org.xtext.example.mydocker.myDocker.util,
+ org.xtext.example.mydocker.parser.antlr,
+ org.xtext.example.mydocker.parser.antlr.internal;x-internal:=true,
+ org.xtext.example.mydocker.scoping,
+ org.xtext.example.mydocker.serializer,
+ org.xtext.example.mydocker.services,
+ org.xtext.example.mydocker.validation
+Import-Package: org.apache.log4j

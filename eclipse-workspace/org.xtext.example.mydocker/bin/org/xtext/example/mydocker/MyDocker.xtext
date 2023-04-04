@@ -1,0 +1,146 @@
+grammar org.xtext.example.mydocker.MyDocker with org.eclipse.xtext.common.Terminals
+
+generate myDocker "http://www.xtext.org/example/mydocker/MyDocker"
+
+Docker hidden(WS, ML_COMMENT, SH_COMMENT):
+    (commands+=Command)*;
+ 
+Command:
+    Add | Arg | Cmd | Copy | Entrypoint | Env | 
+    Expose | From | Healthcheck | Label | 
+    Maintainer | Onbuild | Run | Shell | 
+    StopSignal | User | Volume | Workdir
+;
+
+Add:
+    cmd='ADD' args=CommandArgs
+;
+
+Arg:
+	cmd='ARG' args=ArgArgs
+;
+
+Cmd:
+    cmd='CMD' args=CommandArgs
+;
+
+Copy:
+	cmd='COPY' args=CommandArgs
+;
+
+Entrypoint:
+	cmd='ENTRYPOINT' args=JSONArgs
+;
+
+Env:
+	cmd='ENV' args=NameVals
+;
+Expose:
+	cmd='EXPOSE' args=ExposeArgs
+;
+
+From:
+	cmd='FROM' args=CommandArgs
+;
+
+Healthcheck:
+	cmd='HEALTHCHECK' args=HealthArgs
+;
+
+Label:
+	cmd='LABEL' args=NameVals
+;
+
+Maintainer:
+	cmd='MAINTAINER' args=Value
+;
+
+Onbuild:
+	cmd='ONBUILD' args=ID
+;
+
+Run:
+	cmd='RUN' args=CommandArgs
+;
+
+Shell:
+	cmd='SHELL' args=JSONArgs
+;
+
+StopSignal:
+	cmd='STOPSIGNAL' args=STRING
+;
+
+User:
+	cmd='USER' args=Value
+;
+
+Volume:
+	cmd='VOLUME' args=CommandArgs
+;
+
+Workdir:
+	cmd='WORKDIR' args=Value
+;
+
+CommandArgs:
+	JSONArgs | SpaceArgs
+;
+
+JSONArgs:
+	'[' (args+=STRING) (',' (args+=STRING))* ']'
+	| '[' ']'
+;
+
+SpaceArgs:
+	Value (Value)*
+;
+
+NameVals:
+	(values+=NameVal)+
+;
+
+NameVal:
+	(key=ID value=Value) | (key=ID'='value=Value)
+;
+
+ArgArgs:
+	{ArgArgs} value=Value | values=NameVals 
+;
+
+HealthArgs:
+	typ='None' |
+	options=Options 'CMD' cmdArgs=CommandArgs
+;
+
+Options:
+	{Options} (options+=Option)*
+;
+
+Option:
+	'--' option=ID'='value=Value
+;
+
+Value:
+	STRING | ID | RAW_VALUE 
+;
+
+ExposeArgs:
+	(ports+=ExposeArg)+
+;
+
+ExposeArg:
+	port=INT | (port_protocol=EXPOSE_PORT_PROTOCOL)
+;
+
+terminal EXPOSE_PORT_PROTOCOL:
+	('0' .. '9')+ '/' ('a'..'z'|'_'|'-')+
+;
+
+terminal RAW_VALUE:
+	('a'..'z'|'A'..'Z'|'_'|'-'|'/'|'.'|'\\') ('a'..'z'|'A'..'Z'|'_'|'-'|'0'..'9'|'/'|'.'|'\\'|':')*
+;
+
+terminal SH_COMMENT:
+    '#' !('\n'|'\r')* ('\r'? '\n')?
+;
